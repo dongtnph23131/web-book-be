@@ -1,7 +1,8 @@
 const express=require('express')
-const { addCategory } = require('../controllers/category')
+const { addCategory, getOneCategory } = require('../controllers/category')
 const {authenticate}=require('../middlewares/authenticate')
 const {authorization}=require('../middlewares/authorization')
 const router=express.Router()
 router.post('/categories',authenticate,authorization,addCategory)
+router.get('/categories/:id',getOneCategory)
 module.exports=router
