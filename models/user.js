@@ -25,7 +25,25 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Code'
         }
-    ]
+    ],
+    brith: {
+        type: String,
+    },
+    phone: {
+        type: Number
+    },
+    gender: {
+        type: String,
+    },
+    passwordResetToken: {
+        type: String
+    },
+    passwordResetExpires: {
+        type: String
+    },
+    passwordChangeAt:{
+        type:String
+    }
 }, {
     timestamps: true,
     versionKey: false

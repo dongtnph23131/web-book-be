@@ -51,6 +51,10 @@ const bookSchema = new mongoose.Schema({
     amountSlod:{
         type:Number,
         default:0
+    },
+    view:{
+        type:Number,
+        default:0
     }
 }, {
     timestamps: true,

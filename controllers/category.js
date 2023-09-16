@@ -1,3 +1,4 @@
+const Book = require('../models/book')
 const Category = require('../models/category')
 exports.addCategory = async (req, res) => {
     try {
@@ -23,10 +24,21 @@ exports.getOneCategory = async (req, res) => {
             sort: {
                 [_sort]: _order === 'desc' ? -1 : 1
             },
-            populate: [{ path: "books" }]
+            populate: [{ path: "categoryId" },{path:'authorId'}]
         }
-        const data = await Category.paginate({ _id: categoryId }, options)
+        const data = await Book.paginate({ categoryId: categoryId }, options)
         return res.status(200).json(data.docs)
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
+exports.getAllCategory=async (req, res) => {
+    try {
+        const data=await Category.find().populate('books')
+        return res.status(200).json(data)
     }
     catch (error) {
         return res.status(400).json({
