@@ -1,13 +1,23 @@
 const mongoose = require('mongoose')
-const mongoosePaginate=require('mongoose-paginate-v2')
+const mongoosePaginate = require('mongoose-paginate-v2')
 const bookSchema = new mongoose.Schema({
     name: {
         type: String,
         require: true
     },
+    priceOnCover: {
+        type: Number,
+        require: true
+    },
     price: {
         type: Number,
         require: true
+    },
+    discount: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100
     },
     description: {
         type: String,
@@ -38,23 +48,27 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    authorId:{
+    authorId: {
         type: mongoose.Schema.Types.ObjectId,
         require: true,
         ref: 'Author'
     },
-    categoryId:{
+    categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         require: true,
         ref: 'Category'
     },
-    amountSlod:{
-        type:Number,
-        default:0
+    amountSlod: {
+        type: Number,
+        default: 0
     },
-    view:{
-        type:Number,
-        default:0
+    view: {
+        type: Number,
+        default: 0
+    },
+    numberSearch: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true,

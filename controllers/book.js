@@ -44,7 +44,38 @@ exports.getAllBook = async (req, res) => {
         }
         const searchQuery = q ? { name: { $regex: q, $options: "i" } } : {}
         const data = await Book.paginate(searchQuery, options)
+        if (q) {
+            data.docs.forEach(async (element) => {
+                const bookItem = await Book.findById(element._id)
+                bookItem.numberSearch++;
+                await bookItem.save()
+            });
+        }
         return res.status(200).json(data.docs)
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
+exports.getOneBook = async (req, res) => {
+    try {
+        const data = await Book.findById(req.params.id).populate('authorId').populate('categoryId').populate('publishingCompanyId')
+        return res.status(200).json(data)
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
+exports.addViewBook = async (req, res) => {
+    try {
+        const data = await Book.findById(req.params.id).populate('authorId').populate('categoryId').populate('publishingCompanyId')
+        data.view++
+        await data.save()
+        return res.status(200).json(data)
     }
     catch (error) {
         return res.status(400).json({

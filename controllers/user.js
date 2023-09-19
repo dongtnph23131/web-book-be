@@ -130,18 +130,11 @@ exports.resetPassword = async (req, res) => {
         const hashedToken = crypto.SHA256(req.params.token, 'dongcute').toString();
         const user = await User.findOne({
             passwordResetToken: hashedToken,
-        })
-        const userExits = await User.findOne({
             passwordResetExpires: { $gt: Date.now() }
         })
         if (!user) {
             return res.status(400).json({
                 message: "Mã đổi mật khẩu không chính xác"
-            })
-        }
-        if (!userExits) {
-            return res.status(400).json({
-                message: "Mã đổi mật khẩu hết hạn"
             })
         }
         const handlePass = await bcrypt.hash(req.body.password, 10)

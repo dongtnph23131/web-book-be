@@ -7,6 +7,7 @@ const authorRouter=require('./routers/author')
 const bookRouter=require('./routers/book')
 const publishingCompanyRouter=require('./routers/publishingCompany')
 const userRouter=require('./routers/user')
+const cartRouter=require('./routers/cart')
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -16,6 +17,7 @@ app.use('/api',authorRouter)
 app.use('/api',bookRouter)
 app.use('/api',publishingCompanyRouter)
 app.use('/api',userRouter)
+app.use('/api',cartRouter)
 app.listen(8080, async () => {
     await mongoose.connect('mongodb+srv://donghaha:123456abc@ecommerce.ylijltl.mongodb.net/web-book?retryWrites=true', {
         useNewUrlParser: true,
