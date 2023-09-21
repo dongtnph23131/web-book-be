@@ -33,7 +33,9 @@ exports.addBook = async (req, res) => {
 }
 exports.getAllBook = async (req, res) => {
     try {
-        const { _limit = 10, _sort = "createAt", _pgae = 1, _order = "asc", q } = req.query
+        const dataCategories = await Category.find()
+        const searchCategories = dataCategories.map(item => item._id)
+        const { _limit = 10, _sort = "createAt", _pgae = 1, _order = "asc", q, categories } = req.query
         const options = {
             page: _pgae,
             limit: _limit,
@@ -42,7 +44,25 @@ exports.getAllBook = async (req, res) => {
             },
             populate: [{ path: "categoryId", select: "name" }, { path: "publishingCompanyId", select: "name" }, { path: "authorId", select: "name story image" }]
         }
-        const searchQuery = q ? { name: { $regex: q, $options: "i" } } : {}
+        let searchQuery = q ? {
+            name: { $regex: q, $options: "i" }
+        } : {}
+
+        if (categories) {
+            searchQuery = {
+                ...searchQuery, categoryId: {
+                    $in: categories
+                }
+            }
+        } 
+        console.log(searchQuery);
+
+        
+
+        // const searchQuery = q ? { name: { $regex: q, $options: "i"},categoryId:{
+        //     $in:['65048a0aecc5d3e9b175c131','6503023d112f0874382d76fd']
+        // } } : {}
+
         const data = await Book.paginate(searchQuery, options)
         if (q) {
             data.docs.forEach(async (element) => {
@@ -51,6 +71,7 @@ exports.getAllBook = async (req, res) => {
                 await bookItem.save()
             });
         }
+        console.log(data.totalDocs);
         return res.status(200).json(data.docs)
     }
     catch (error) {
