@@ -35,7 +35,10 @@ exports.getAllBook = async (req, res) => {
     try {
         const dataCategories = await Category.find()
         const searchCategories = dataCategories.map(item => item._id)
-        const { _limit = 10, _sort = "createAt", _pgae = 1, _order = "asc", q, categories } = req.query
+        const haha=searchCategories.forEach((item,index)=>{
+            
+        })
+        const { _limit = 10, _sort = "createAt", _pgae = 1, _order = "asc", q} = req.query
         const options = {
             page: _pgae,
             limit: _limit,
@@ -44,20 +47,9 @@ exports.getAllBook = async (req, res) => {
             },
             populate: [{ path: "categoryId", select: "name" }, { path: "publishingCompanyId", select: "name" }, { path: "authorId", select: "name story image" }]
         }
-        let searchQuery = q ? {
+        const searchQuery = q ? {
             name: { $regex: q, $options: "i" }
         } : {}
-
-        if (categories) {
-            searchQuery = {
-                ...searchQuery, categoryId: {
-                    $in: categories
-                }
-            }
-        } 
-        console.log(searchQuery);
-
-        
 
         // const searchQuery = q ? { name: { $regex: q, $options: "i"},categoryId:{
         //     $in:['65048a0aecc5d3e9b175c131','6503023d112f0874382d76fd']
