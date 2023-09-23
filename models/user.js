@@ -29,6 +29,21 @@ const userSchema = new mongoose.Schema({
     brith: {
         type: String,
     },
+    city:{
+        type:String,
+    },
+    district:{
+        type:String
+    },
+    ward:{
+        type:String,
+    },
+    numberHome:{
+        type:Number,
+    },
+    road:{
+        type:String
+    },
     phone: {
         type: Number
     },

@@ -17,7 +17,7 @@ exports.addCategory = async (req, res) => {
 exports.getOneCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;
-        const { _limit = 10, _page = 1, _sort = "createAt", _order = "asc" } = req.query
+        const { _limit = 100, _page = 1, _sort = "createAt", _order = "asc" } = req.query
         const options = {
             limit: _limit,
             page: _page,

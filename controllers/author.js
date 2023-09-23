@@ -30,3 +30,14 @@ exports.getAllAuthor=async (req, res) => {
         })
     }
 }
+exports.getOneAuthor=async (req, res) => {
+    try {
+        const data = await Author.findById(req.params.id).populate('books').populate('publishingCompanyId')
+        return res.status(200).json(data)
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
