@@ -86,8 +86,7 @@ exports.addCouponsToUser = async (req, res) => {
 }
 exports.searchCouponsAdmin = async (req, res) => {
     try {
-        let data;
-        data = await Coupons.findOne({ name: req.query.search })
+       const data = await Coupons.findOne({ name: req.query.search })
         if (!data) {
             return res.status(400).json({
                 message: 'Phiếu giảm gía không tồn tại'
