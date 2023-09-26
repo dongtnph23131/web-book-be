@@ -1,4 +1,4 @@
-const Coupons = require('../models/coupons');
+const Coupons=require('../models/coupons')
 const User = require('../models/user');
 
 exports.create = async (req, res) => {
@@ -48,16 +48,9 @@ exports.addCouponsToOrder = async (req, res) => {
 exports.addCouponsToUser = async (req, res) => {
     try {
         const coupons = await Coupons.findById(req.body.code)
-        const dataCoupons = new Date(coupons.expiration_date)
-        const dataNow = new Date()
         if (!coupons) {
             return res.status(400).json({
                 message: 'Phiếu giảm giá không đúng'
-            })
-        }
-        if (dataNow > dataCoupons) {
-            return res.status(400).json({
-                message: 'Mã giảm giá hết hạn'
             })
         }
         if (coupons.statusDonation) {
@@ -76,11 +69,14 @@ exports.addCouponsToUser = async (req, res) => {
                 message: 'Tài khoản không tồn tại'
             })
         }
+        coupons.statusDonation = true;
+        await coupons.save()
         await User.findByIdAndUpdate(user._id, {
             $addToSet: {
-                code: coupons._id
+                couponsId: coupons._id
             }
         })
+
         return res.status(200).json({
             message: 'Tặng phiếu giảm giá thành công'
         })
@@ -93,16 +89,75 @@ exports.addCouponsToUser = async (req, res) => {
 }
 exports.searchCouponsAdmin = async (req, res) => {
     try {
+        console.log(req.query.search);
         const data = await Coupons.findOne({
-            name: req.query.search, statusUsage
-                : false, statusDonation: false
+            name: req.query.search,
         })
+        const dataCoupons = new Date(data.expiration_date)
+        const dataNow = new Date()
+        if (dataNow > dataCoupons) {
+            return res.status(400).json({
+                message: 'Mã giảm giá hết hạn'
+            })
+        }
+        if (data.statusUsage === true) {
+            return res.status(400).json({
+                message: 'Phiếu giảm gía đã được sử dụng'
+            })
+        }
+        if (data.statusDonation === true) {
+            return res.status(400).json({
+                message: 'Phiếu giảm gía đã được tặng'
+            })
+        }
         if (!data) {
             return res.status(400).json({
                 message: 'Phiếu giảm gía không tồn tại'
             })
         }
         return res.status(200).json(data)
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
+exports.useCouponsClient = async (req, res) => {
+    try {
+        const data = await Coupons.findOne({
+            name: req.query.search,
+        })
+        if (!data) {
+            return res.status(400).json({
+                message: 'Phiếu giảm gía không tồn tại'
+            })
+        }
+        const dataCoupons = new Date(data.expiration_date)
+        const dataNow = new Date()
+        if (dataNow > dataCoupons) {
+            return res.status(400).json({
+                message: 'Mã giảm giá hết hạn'
+            })
+        }
+        if (data.statusUsage === true) {
+            return res.status(400).json({
+                message: 'Phiếu giảm gía đã được sử dụng'
+            })
+        }
+        const user=await User.findById(req.user._id)
+        const couponsItem=user.couponsId.find(item=>{
+            const coupons=JSON.stringify(item)
+            const coupons_id=JSON.stringify(data._id)
+            return coupons===coupons_id
+        })
+        if(!couponsItem){
+            return res.status(400).json({
+                message:'Mã giảm giá không đúng'
+            })
+        }
+        const dataCouponsRes=await Coupons.findById(couponsItem)
+        return res.status(200).json(dataCouponsRes)
     }
     catch (error) {
         return res.status(400).json({

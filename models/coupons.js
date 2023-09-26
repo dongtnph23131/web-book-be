@@ -28,4 +28,4 @@ const couponsSchema = new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-module.exports = mongoose.model('Counpons', couponsSchema)
+module.exports = mongoose.model('Coupons', couponsSchema)

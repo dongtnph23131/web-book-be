@@ -7,7 +7,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 exports.getProfile = async (req, res) => {
     try {
-        const userLogger = req.user;
+        const userLogger = await User.findById(req.user._id).populate('couponsId');
         return res.status(200).json({
             message: 'Lấy thông tin cá nhân thành công',
             user: userLogger

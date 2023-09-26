@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'member'
     },
-    code: [
+    couponsId: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Coupons'
