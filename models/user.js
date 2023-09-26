@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     code: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Code'
+            ref: 'Coupons'
         }
     ],
     brith: {

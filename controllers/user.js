@@ -159,3 +159,29 @@ exports.resetPassword = async (req, res) => {
         })
     }
 }
+exports.getAllUser = async (req, res) => {
+    try {
+        let data;
+        if (req.query.role) {
+            data = User.find({ role: req.query.role })
+        }
+        else {
+            data = User.find()
+        }
+        if (req.query.search) {
+            data = data.where({
+                $or: [
+                    { name: { $regex: req.query.search, $options: 'i' } },
+                    { email: { $regex: req.query.search, $options: 'i' } }
+                ]
+            })
+        }
+        const users=await data;
+        return res.status(200).json(users)
+    }
+    catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
+}
