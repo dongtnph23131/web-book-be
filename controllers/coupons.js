@@ -47,7 +47,7 @@ exports.addCouponsToOrder = async (req, res) => {
 }
 exports.addCouponsToUser = async (req, res) => {
     try {
-        const coupons = await Coupons.findOne({ name: req.body.code })
+        const coupons = await Coupons.findById(req.body.code)
         const dataCoupons=new Date(coupons.expiration_date)
         const dataNow=new Date.now()
         if (!coupons) {
