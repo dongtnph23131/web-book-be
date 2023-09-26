@@ -84,7 +84,7 @@ exports.addCouponsToUser = async (req, res) => {
         })
     }
 }
-exports.getCoupons = async (req, res) => {
+exports.searchCouponsAdmin = async (req, res) => {
     try {
         let data;
         data = await Coupons.findOne({ name: req.query.search })
