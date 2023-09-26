@@ -49,7 +49,7 @@ exports.addCouponsToUser = async (req, res) => {
     try {
         const coupons = await Coupons.findById(req.body.code)
         const dataCoupons=new Date(coupons.expiration_date)
-        const dataNow=new Date.now()
+        const dataNow=new Date()
         if (!coupons) {
             return res.status(400).json({
                 message: 'Phiếu giảm giá không đúng'
