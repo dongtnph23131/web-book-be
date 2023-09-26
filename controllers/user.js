@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto-js')
 const nodemailer = require('nodemailer')
+const dotenv = require('dotenv')
+dotenv.config()
 exports.getProfile = async (req, res) => {
     try {
         const userLogger = req.user;
@@ -96,7 +98,7 @@ exports.forgotPassword = async (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'tranngocdong2042003@gmail.com',
-                pass: 'kaivhxsscgiuiosp'
+                pass: process.env.PasswordMail
             }
 
         });
