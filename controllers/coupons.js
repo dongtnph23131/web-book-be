@@ -48,16 +48,16 @@ exports.addCouponsToOrder = async (req, res) => {
 exports.addCouponsToUser = async (req, res) => {
     try {
         const coupons = await Coupons.findById(req.body.code)
-        const dataCoupons=new Date(coupons.expiration_date)
-        const dataNow=new Date()
+        const dataCoupons = new Date(coupons.expiration_date)
+        const dataNow = new Date()
         if (!coupons) {
             return res.status(400).json({
                 message: 'Phiếu giảm giá không đúng'
             })
         }
-        if(dataNow>dataCoupons){
+        if (dataNow > dataCoupons) {
             return res.status(400).json({
-                message:'Mã giảm giá hết hạn'
+                message: 'Mã giảm giá hết hạn'
             })
         }
         if (coupons.statusDonation) {
@@ -95,7 +95,7 @@ exports.searchCouponsAdmin = async (req, res) => {
     try {
         const data = await Coupons.findOne({
             name: req.query.search, statusUsage
-                : false, statusDonation: true
+                : false, statusDonation: false
         })
         if (!data) {
             return res.status(400).json({
