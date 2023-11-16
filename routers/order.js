@@ -7,6 +7,6 @@ router.post('/orders',authenticate,createOrder)
 router.get('/orders',getAllOrder)
 router.get('/orders/:id',getOrderDetail)
 router.patch('/orders/:id',updateOrder)
-router.get('/myOrder/:userId',getMyOrders)
+router.get('/myOrder',authenticate,getMyOrders)
 //
 module.exports=router

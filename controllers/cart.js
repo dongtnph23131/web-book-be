@@ -113,3 +113,16 @@ exports.removeItem = async (req, res) => {
         })
     }
 }
+exports.removeCart=async (req, res) => {
+    try {
+        const user = req.user
+        const cart = await Cart.findOne({ userId: user._id })
+        cart.items = [];
+        await cart.save({ validateBeforeSave: false });
+    }
+    catch (error) {
+        return res.status(400).json({
+            message: error.message
+        })
+    }
+}
